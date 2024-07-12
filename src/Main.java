@@ -9,18 +9,24 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) throws IOException, InterruptedException {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        File file = new File("arquivoCEP.txt");
-        FileWriter fw = new FileWriter(file);
+        GeraArquivo geraArquivo = new GeraArquivo();
+
         Scanner sc = new Scanner(System.in);
 
 
         System.out.println("Digite um CEP:");
         String cep = sc.nextLine();
-        ViaCepAPI viaCepAPI = new ViaCepAPI(cep);
-        ViaCepRecord viaCep = gson.fromJson(viaCepAPI.retornaResposta(), ViaCepRecord.class);
-        ViaCEPImpl viaCEPImpl = new ViaCEPImpl(viaCep);
-        fw.write(gson.toJson(viaCEPImpl));
-        fw.close();
+
+        try {
+            ViaCepAPI viaCepAPI = new ViaCepAPI(cep);
+            ViaCepRecord viaCep = gson.fromJson(viaCepAPI.retornaResposta(), ViaCepRecord.class);
+            ViaCEPImpl viaCEPImpl = new ViaCEPImpl(viaCep);
+            geraArquivo.geraArquivo(viaCEPImpl);
+        }
+        catch (Exception e){
+            System.out.println("Erro ao executar o programa");
+        }
+
 
 
 
